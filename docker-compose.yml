@@ -9,7 +9,7 @@ services:
     volumes:
       - ./backend:/app # Mount backend source code for development hot-reloading
     env_file:
-      - .env.example # Load environment variables from .env.example (or .env)
+      - ./backend/.env # Load environment variables from backend/.env
     # Optional: Add healthcheck if needed for depends_on
 
   frontend:
@@ -22,7 +22,7 @@ services:
     volumes:
       - ./frontend:/app # Mount frontend source code for development hot-reloading
     env_file:
-      - .env.example # Load environment variables (e.g., backend URL)
+      - ./frontend/.env # Load environment variables from frontend/.env
     depends_on:
       - backend # Wait for the backend service to start
     environment:
