@@ -1,1 +1,32 @@
- 
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: docuparse-backend
+    ports:
+      - "8000:8000" # Map host port 8000 to container port 8000
+    volumes:
+      - ./backend:/app # Mount backend source code for development hot-reloading
+    env_file:
+      - .env.example # Load environment variables from .env.example (or .env)
+    # Optional: Add healthcheck if needed for depends_on
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: docuparse-frontend
+    ports:
+      - "8501:8501" # Map host port 8501 to container port 8501
+    volumes:
+      - ./frontend:/app # Mount frontend source code for development hot-reloading
+    env_file:
+      - .env.example # Load environment variables (e.g., backend URL)
+    depends_on:
+      - backend # Wait for the backend service to start
+    environment:
+      # Ensure Streamlit can reach the backend service via its service name
+      - BACKEND_URL=http://backend:8000 
