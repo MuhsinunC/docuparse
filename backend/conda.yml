@@ -1,0 +1,19 @@
+name: docuparse-backend
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - fastapi
+  - uvicorn[standard]
+  - pydantic
+  - pymupdf
+  # - pdfplumber # Alternative PDF parser
+  - python-dotenv
+  - requests
+  # Potential future dependencies
+  # - celery # For async tasks
+  # - redis-py # For Celery broker/backend
+  # Development/Testing
+  # - pytest
+  # - httpx # For testing FastAPI endpoints

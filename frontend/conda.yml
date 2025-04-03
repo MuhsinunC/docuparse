@@ -1,0 +1,10 @@
+name: docuparse-frontend
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - streamlit
+  - requests # For calling the backend API
+  - pandas # If displaying dataframes
+  - pillow # If displaying images

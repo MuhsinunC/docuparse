@@ -1,4 +1,68 @@
-# DocuParse
+# DocuParse Project
+
+This project is a full-stack application for parsing documents (initially PDFs) and extracting structured information.
+It features a backend API for processing and a Streamlit frontend for user interaction, orchestrated via Docker Compose.
+
+## Project Structure
+
+```
+docuparse/
+├── backend/                  # FastAPI Backend API Service
+│   ├── app/                  # Core application logic
+│   │   ├── __init__.py
+│   │   ├── main.py           # FastAPI app definition and root endpoints
+│   │   ├── api/              # API endpoint definitions
+│   │   │   ├── __init__.py
+│   │   │   └── v1/           # API version 1
+│   │   │       ├── __init__.py
+│   │   │       └── endpoints/
+│   │   │           ├── __init__.py
+│   │   │           └── parse.py  # Endpoints related to parsing
+│   │   ├── core/             # Core logic (parsing, structuring)
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py     # Configuration settings
+│   │   │   ├── parser.py     # Document parsing logic
+│   │   │   └── structurer.py # Logic to structure parsed data
+│   │   ├── models/           # Pydantic models for request/response
+│   │   │   ├── __init__.py
+│   │   │   └── document.py
+│   │   └── schemas/          # Data schemas (if needed, e.g., for DB)
+│   │       ├── __init__.py
+│   │       └── ...
+│   ├── tests/                # Backend tests
+│   │   ├── __init__.py
+│   │   └── ...
+│   ├── Dockerfile            # Dockerfile for the backend service
+│   └── conda.yml             # Conda dependencies for the backend
+│
+├── frontend/                 # Streamlit Frontend Service
+│   ├── app.py                # Main Streamlit application script
+│   ├── pages/                # Optional: For multi-page Streamlit apps
+│   │   └── ...
+│   ├── components/           # Reusable UI components (optional)
+│   │   └── ...
+│   ├── utils/                # Utility functions (e.g., API client)
+│   │   └── api_client.py
+│   ├── Dockerfile            # Dockerfile for the frontend service
+│   └── conda.yml             # Conda dependencies for the frontend
+│
+├── docker-compose.yml        # Docker Compose configuration
+├── .env.example              # Example environment variables
+├── .gitignore                # Git ignore file
+├── README.md                 # This file
+└── project_spec.md           # Project specification
+```
+
+## Key Components
+
+*   **`backend/`**: Contains the FastAPI application, including API endpoints, core parsing/structuring logic, data models, and its Dockerfile.
+*   **`frontend/`**: Contains the Streamlit application, UI components, API client utilities, and its Dockerfile.
+*   **`docker-compose.yml`**: Defines how to build and run the backend and frontend services together as containers.
+*   **`project_spec.md`**: The detailed specification for this project.
+
+## Getting Started
+
+(Instructions to be added later: e.g., setting up .env, running `docker-compose up`)
 
 ## 1. Goal
 
@@ -53,7 +117,7 @@ The application will allow users to upload documents through a web interface. Th
 *   **PDF Parsing:** `PyMuPDF` (fitz) or `pdfplumber`
 *   **Web Framework/UI:** Streamlit
 *   **Orchestration:** Docker, Docker Compose
-*   **Dependencies:** Conda environment (separate for backend and frontend)
+*   **Dependencies:** Conda `conda.yml` (separate for backend and frontend)
 
 ## 5. Architecture Overview
 
@@ -99,7 +163,7 @@ This project will be structured as a multi-container application orchestrated us
 *   **Accuracy:** Extracted text is correct; tables are accurately identified and structured.
 *   **Output Quality:** JSON output is well-formed and accurately represents the extracted content.
 *   **UI/UX:** The Streamlit interface is intuitive and effectively displays results.
-*   **Code Quality:** Code is well-organized, documented, follows Python best practices, and includes easy-to-replicate instructions for setting up the environment (Conda environments, Docker containers, etc).
+*   **Code Quality:** Code is well-organized, documented, follows Python best practices, and includes easy-to-replicate instructions for setting up the environment (Conda environments via `conda.yml`, Docker containers, etc).
 *   **Demonstration:** Ability to run the application locally and demonstrate its features effectively.
 
 ## 9. Potential Future Enhancements
