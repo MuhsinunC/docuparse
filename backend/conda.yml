@@ -3,13 +3,15 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - pip
   - fastapi
   - uvicorn[standard]
-  - pymupdf
-  # - pdfplumber
   - pydantic
   - python-dotenv
-  - requests
+  - pip:
+    - pymupdf
+    # - pdfplumber # Alternative if needed
+
   # Potential future dependencies
   # - celery # For async tasks
   # - redis-py # For Celery broker/backend
