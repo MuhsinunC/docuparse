@@ -8,6 +8,7 @@ dependencies:
   - uvicorn[standard]
   - pydantic
   - python-dotenv
+  - requests
   - pip:
     - pymupdf
     # - pdfplumber # Alternative if needed

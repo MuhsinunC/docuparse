@@ -13,15 +13,22 @@ RUN conda env create -f conda.yml
 
 # Make RUN commands use the new environment:
 # Note: Adjust 'docuparse-backend' if you change the name in conda.yml
-SHELL ["conda", "run", "-n", "docuparse-backend", "/bin/bash", "-c"]
+# SHELL ["conda", "run", "-n", "docuparse-backend", "/bin/bash", "-c"]
 
 # Copy the application code into the container
 # Assumes your FastAPI app code is in an 'app' directory next to the Dockerfile
-COPY ./app ./app
+# COPY ./app ./app
+COPY . .
+
+# Copy the entrypoint script and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Expose the port the application will run on
 EXPOSE 8000
 
 # Define the command to run the application using Uvicorn
 # This command runs within the 'docuparse-backend' conda environment
-CMD ["conda", "run", "-n", "docuparse-backend", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"] 
+# CMD ["/bin/bash", "-c", "source activate docuparse-backend && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"] 
