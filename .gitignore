@@ -1,0 +1,12 @@
+# Secrets
+.env_vars
+.vscode/
+
+# Python bytecode and cache (if applicable)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# macOS system files
+.DS_Store
