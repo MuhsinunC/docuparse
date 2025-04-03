@@ -50,7 +50,7 @@ docuparse/
 ├── .env.example              # Example environment variables
 ├── .gitignore                # Git ignore file
 ├── README.md                 # This file
-└── project_spec.md           # Project specification
+└── README.md           # Project specification
 ```
 
 ## Key Components
@@ -58,7 +58,7 @@ docuparse/
 *   **`backend/`**: Contains the FastAPI application, including API endpoints, core parsing/structuring logic, data models, and its Dockerfile.
 *   **`frontend/`**: Contains the Streamlit application, UI components, API client utilities, and its Dockerfile.
 *   **`docker-compose.yml`**: Defines how to build and run the backend and frontend services together as containers.
-*   **`project_spec.md`**: The detailed specification for this project.
+*   **`README.md`**: The detailed specification for this project.
 
 ## Getting Started
 
