@@ -1,5 +1,8 @@
 from fastapi import APIRouter, File, UploadFile, HTTPException
 import logging
+import sys # Import sys
+
+print("[BACKEND PRINT - MODULE LEVEL]: Loading parse.py", flush=True, file=sys.stderr)
 
 # Configure basic logging
 logging.basicConfig(level=logging.INFO)
@@ -10,7 +13,9 @@ router = APIRouter()
 @router.post("/upload", status_code=200)
 async def upload_document(file: UploadFile = File(...)):
     """Receives a document upload and logs the event."""
-    logger.info(f"Received file upload: {file.filename}, Content-Type: {file.content_type}")
+    # Use print for direct output, ensuring it flushes
+    print(f"[BACKEND PRINT - ENDPOINT]: Received file upload: {file.filename}, Content-Type: {file.content_type}", flush=True, file=sys.stderr)
+    # logger.info(f"Received file upload: {file.filename}, Content-Type: {file.content_type}") # Keep original logger line commented for now
 
     # --- Placeholder for actual parsing logic ---
     # 1. Save the file temporarily (optional but often needed)
