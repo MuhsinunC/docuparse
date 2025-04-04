@@ -49,8 +49,7 @@ docuparse/
 ├── docker-compose.yml        # Docker Compose configuration
 ├── .env.example              # Example environment variables
 ├── .gitignore                # Git ignore file
-├── README.md                 # This file
-└── README.md           # Project specification
+└── README.md           # Project specification (this file)
 ```
 
 ## Key Components
