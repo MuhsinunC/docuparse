@@ -1,20 +1,10 @@
 import requests
-import io
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 
 # Determine the script's directory and the backend directory
 script_dir = Path(__file__).resolve().parent
 backend_dir = script_dir.parent
-
-# Load environment variables from .env file in the backend directory
-dotenv_path = backend_dir / '.env'
-if dotenv_path.exists():
-    print(f"Loading environment variables from: {dotenv_path}")
-    load_dotenv(dotenv_path=dotenv_path)
-else:
-    print(f"Warning: .env file not found at {dotenv_path}. Using default or system env vars.")
 
 # URL for the backend service. Loaded from .env or defaults to localhost:8000
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
