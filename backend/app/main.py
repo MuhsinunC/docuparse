@@ -1,13 +1,15 @@
 # backend/app/main.py
 from fastapi import FastAPI
-from .api.v1.endpoints import parse # Import the router
+# Import the central v1 router
+from .api.v1.routes import api_v1_router
 
-app = FastAPI(title="DocuParse Backend")
+app = FastAPI(title="DocuParse Backend - Reducto API Mirror")
 
 @app.get("/")
 def read_root():
-    return {"message": "DocuParse Backend is running"}
+    return {"message": "DocuParse Backend (Reducto Mirror) is running"}
 
-# Include the parsing router
-# All routes defined in parse.py will now be under /api/v1/parse
-app.include_router(parse.router, prefix="/api/v1/parse", tags=["parse"])
+# Include the main v1 router
+# All routes defined in routes.py (which includes routes from endpoint files)
+# will be available under the /api/v1 prefix
+app.include_router(api_v1_router, prefix="/api/v1")
