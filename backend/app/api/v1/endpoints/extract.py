@@ -5,7 +5,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+sync_router = APIRouter()
+async_router = APIRouter()
 
 # --- Common Models --- #
 
@@ -28,7 +29,7 @@ class ExtractResponse(BaseModel):
     result: Optional[Any] = Field(None, description="Extracted data based on the schema.")
     message: str
 
-@router.post(
+@sync_router.post(
     "/", # Route is at /api/v1/extract
     response_model=ExtractResponse, # Placeholder response
     summary="Extract Data (Synchronous)",
@@ -49,8 +50,8 @@ class AsyncExtractRequest(BaseModel):
     options: Optional[Dict[str, Any]] = Field(None, description="Extraction options.")
     webhook: Optional[Dict[str, str]] = Field(None, description="Optional webhook configuration.", example={"mode": "svix"})
 
-@router.post(
-    "/async", # Route is at /api/v1/extract/async
+@sync_router.post(
+    "/", # Path relative to the prefix defined in routes.py
     response_model=AsyncJobResponse,
     summary="Extract Data (Asynchronous)",
     description="Initiates an asynchronous job to extract data based on a schema. Returns a job ID.",
