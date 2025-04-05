@@ -8,6 +8,7 @@ services:
       - "8000:8000" # Map host port 8000 to container port 8000
     volumes:
       - ./backend:/app # Mount backend source code for development hot-reloading
+      - ./README.md:/app/README.md # Mount the root README.md
     env_file:
       - ./backend/.env # Load environment variables from backend/.env
     # Optional: Add healthcheck if needed for depends_on
@@ -21,6 +22,7 @@ services:
       - "8501:8501" # Map host port 8501 to container port 8501
     volumes:
       - ./frontend:/app # Mount frontend source code for development hot-reloading
+      - ./README.md:/app/README.md # Mount the root README.md
     env_file:
       - ./frontend/.env # Load environment variables from frontend/.env
     depends_on:
