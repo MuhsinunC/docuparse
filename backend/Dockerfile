@@ -11,6 +11,10 @@ COPY conda.yml .
 # The environment name 'docuparse-backend' is taken from conda.yml
 RUN conda env create -f conda.yml
 
+# Initialize conda for bash and activate the environment by default for interactive shells
+# Using bash -c to ensure commands run correctly in a single layer
+RUN bash -c "conda init bash && echo 'conda activate docuparse-backend' >> /root/.bashrc"
+
 # Make RUN commands use the new environment:
 # Note: Adjust 'docuparse-backend' if you change the name in conda.yml
 # SHELL ["conda", "run", "-n", "docuparse-backend", "/bin/bash", "-c"]

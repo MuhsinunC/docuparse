@@ -11,6 +11,10 @@ COPY conda.yml .
 # The environment name 'docuparse-frontend' is taken from conda.yml
 RUN conda env create -f conda.yml
 
+# Initialize conda for bash and activate the environment by default for interactive shells
+# Using bash -c to ensure commands run correctly in a single layer
+RUN bash -c "conda init bash && echo 'conda activate docuparse-frontend' >> /root/.bashrc"
+
 # Copy the application code into the container
 # Assumes your Streamlit app code (app.py, pages/, etc.) is in the frontend directory
 COPY . .
