@@ -7,11 +7,11 @@ services:
     ports:
       - "8000:8000" # Map host port 8000 to container port 8000
     volumes:
-      - ./backend:/app # Mount backend source code for development hot-reloading
+      # Re-add full directory mount for hot-reloading
+      - ./backend:/app
       - ./README.md:/app/README.md # Mount the root README.md
     env_file:
       - ./backend/.env # Load environment variables from backend/.env
-    # Optional: Add healthcheck if needed for depends_on
 
   frontend:
     build:
@@ -21,7 +21,8 @@ services:
     ports:
       - "8501:8501" # Map host port 8501 to container port 8501
     volumes:
-      - ./frontend:/app # Mount frontend source code for development hot-reloading
+      # Re-add full directory mount for hot-reloading
+      - ./frontend:/app
       - ./README.md:/app/README.md # Mount the root README.md
     env_file:
       - ./frontend/.env # Load environment variables from frontend/.env
@@ -29,4 +30,19 @@ services:
       - backend # Wait for the backend service to start
     environment:
       # Ensure Streamlit can reach the backend service via its service name
-      - BACKEND_URL=http://backend:8000 
+      - BACKEND_URL=http://backend:8000
+
+# Keep volumes for secrets/db if they exist
+# volumes: ...
+# secrets: ...
+
+# Optional: Add healthcheck if needed for depends_on
+# healthcheck:
+#   test: ["CMD-SHELL", "curl -f http://localhost:8000/docs || exit 1"]
+#   interval: 30s
+#   timeout: 10s
+#   retries: 3
+#   start_period: 40s
+
+# Optional: Add restart policy
+# restart: unless-stopped 

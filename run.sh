@@ -7,5 +7,6 @@ echo "Building and starting Docker containers..."
 export COMPOSE_BAKE=true
 
 docker-compose up --build
+# docker compose watch
 
 unset COMPOSE_BAKE
