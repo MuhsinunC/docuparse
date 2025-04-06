@@ -1,1 +1,1 @@
- 
+# This file can be used for core configuration settings.
