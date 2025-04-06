@@ -134,3 +134,7 @@ Thumbs.db
 # Temporary files for uploads/processing (if stored locally)
 uploads/
 tmp/
+
+# Ignore auto-generated empty README files caused by volume mounts
+backend/README.md
+frontend/README.md
