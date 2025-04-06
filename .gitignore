@@ -141,3 +141,5 @@ tmp/
 # Ignore auto-generated empty README files caused by volume mounts
 backend/README.md
 frontend/README.md
+backend/.gitignore
+frontend/.gitignore

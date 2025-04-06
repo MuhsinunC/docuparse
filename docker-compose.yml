@@ -10,6 +10,8 @@ services:
       # Re-add full directory mount for hot-reloading
       - ./backend:/app
       - ./README.md:/app/README.md # Mount the root README.md
+      - ./.cursor:/root/.cursor # Mount .cursor directory
+      - ./.gitignore:/app/.gitignore # Mount .gitignore
     env_file:
       - ./backend/.env # Load environment variables from backend/.env
 
@@ -24,6 +26,8 @@ services:
       # Re-add full directory mount for hot-reloading
       - ./frontend:/app
       - ./README.md:/app/README.md # Mount the root README.md
+      - ./.cursor:/root/.cursor # Mount .cursor directory
+      - ./.gitignore:/app/.gitignore # Mount .gitignore
     env_file:
       - ./frontend/.env # Load environment variables from frontend/.env
     depends_on:
