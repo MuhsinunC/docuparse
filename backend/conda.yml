@@ -17,5 +17,6 @@ dependencies:
   # - celery # For async tasks
   # - redis-py # For Celery broker/backend
   # Development/Testing
-  # - pytest
-  # - httpx # For testing FastAPI endpoints
+  - pytest
+  - pytest-asyncio # For async endpoint testing
+  - httpx # For testing FastAPI endpoints

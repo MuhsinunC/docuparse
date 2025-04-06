@@ -1,6 +1,10 @@
 import requests
 import os
 from pathlib import Path
+import pytest
+from fastapi.testclient import TestClient
+import shutil
+import uuid
 
 # Determine the script's directory and the backend directory
 script_dir = Path(__file__).resolve().parent
@@ -13,6 +17,47 @@ UPLOAD_ENDPOINT = f"{BACKEND_URL}/api/v1/parse/upload"
 # --- Load Actual PDF File ---
 pdf_filename = "Muhsinun Chowdhury Resume.pdf"
 pdf_file_path = os.path.join(script_dir, "assets", "example_pdfs", pdf_filename)
+
+# Assume your FastAPI app is defined in app.main
+# Adjust the import path if your app instance is located elsewhere
+try:
+    from app.main import app
+except ImportError:
+    # If running tests from a different structure, adjust path as needed
+    import sys
+    sys.path.insert(0, Path(__file__).resolve().parent.parent.as_posix())
+    from app.main import app
+
+# Determine the test upload directory from environment or use a default
+TEST_UPLOAD_DIR_STR = os.getenv("UPLOAD_DIR", "/app/test_uploads")
+TEST_UPLOAD_DIR = Path(TEST_UPLOAD_DIR_STR)
+
+@pytest.fixture(scope="module")
+def client():
+    """Create a TestClient instance for the FastAPI app."""
+    # Ensure the test upload directory exists and is clean before tests run
+    if TEST_UPLOAD_DIR.exists():
+        shutil.rmtree(TEST_UPLOAD_DIR)
+    TEST_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Set the UPLOAD_DIR environment variable for the test session
+    # This ensures the endpoint uses the test directory
+    original_upload_dir = os.environ.get("UPLOAD_DIR")
+    os.environ["UPLOAD_DIR"] = TEST_UPLOAD_DIR_STR
+
+    with TestClient(app) as c:
+        yield c
+
+    # Clean up the test upload directory after tests run
+    if TEST_UPLOAD_DIR.exists():
+        shutil.rmtree(TEST_UPLOAD_DIR)
+
+    # Restore original UPLOAD_DIR environment variable if it existed
+    if original_upload_dir is None:
+        # Use pop to avoid KeyError if it wasn't set initially
+        os.environ.pop("UPLOAD_DIR", None)
+    else:
+        os.environ["UPLOAD_DIR"] = original_upload_dir
 
 def test_upload():
     print(f"--- Testing Upload Endpoint ({UPLOAD_ENDPOINT}) ---")
@@ -62,6 +107,50 @@ def test_upload():
             print(f"Response text: {e.response.text[:500]}...")
     finally:
         print("--- Test Finished ---")
+
+def test_upload_success(client: TestClient):
+    """Test successful file upload."""
+    test_filename = "test_document.pdf"
+    file_content = b"This is a test PDF content."
+    files = {'file': (test_filename, file_content, 'application/pdf')}
+
+    response = client.post("/api/v1/upload", files=files)
+
+    assert response.status_code == 200
+    data = response.json()
+    assert "file_id" in data
+    assert data["original_filename"] == test_filename
+    assert data["content_type"] == 'application/pdf'
+    assert data["file_id"].startswith("file_")
+
+    # Verify the file was actually saved in the test directory
+    file_id = data["file_id"]
+    expected_path = TEST_UPLOAD_DIR / f"{file_id}.pdf"
+    assert expected_path.exists()
+    assert expected_path.read_bytes() == file_content
+
+def test_upload_no_filename(client: TestClient):
+    """Test uploading a file without providing a filename."""
+    # Sending None as filename to TestClient (supported way)
+    files = {'file': (None, b"some content", "application/octet-stream")}
+    response = client.post("/api/v1/upload", files=files)
+
+    # Expecting a 422 Unprocessable Entity if Starlette/FastAPI handles it first
+    # Or 400 Bad Request if it reaches our endpoint logic check (less likely with TestClient)
+    assert response.status_code == 422 # FastAPI/Starlette validation usually catches this
+    # Detail message might vary, but check for relevance
+    detail = response.json().get("detail", [])
+    assert isinstance(detail, list)
+    assert len(detail) > 0
+    assert any("file" in item.get("loc", []) for item in detail) # Check that the error is related to the 'file' field
+
+# Optional: Add a test for incorrect field name if desired
+# def test_upload_wrong_field_name(client: TestClient):
+#     test_filename = "wrong_field.txt"
+#     file_content = b"content"
+#     files = {'wrong_field': (test_filename, file_content, 'text/plain')}
+#     response = client.post("/api/v1/upload", files=files)
+#     assert response.status_code == 422 # Unprocessable Entity due to missing 'file' field
 
 if __name__ == "__main__":
     test_upload() 
