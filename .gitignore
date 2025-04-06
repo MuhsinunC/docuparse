@@ -1,3 +1,6 @@
+# Dev environment
+.cursor/
+
 # Secrets
 .env_vars
 .vscode/
