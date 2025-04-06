@@ -2,8 +2,6 @@ from fastapi import APIRouter, File, UploadFile, HTTPException
 import logging
 import sys
 
-print("[BACKEND PRINT - MODULE LEVEL]: Loading NEW upload.py", flush=True, file=sys.stderr)
-
 # Configure basic logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

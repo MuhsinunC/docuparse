@@ -4,8 +4,6 @@ from typing import Optional, Dict, Any, List
 import logging
 import sys
 
-print("[BACKEND PRINT - MODULE LEVEL]: Loading parse.py", flush=True, file=sys.stderr)
-
 # Configure basic logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
