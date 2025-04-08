@@ -12,7 +12,7 @@ backend_dir = script_dir.parent
 
 # URL for the backend service. Loaded from .env or defaults to localhost:8000
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
-UPLOAD_ENDPOINT = f"{BACKEND_URL}/api/v1/parse/upload"
+UPLOAD_ENDPOINT = f"{BACKEND_URL}/api/v1/upload"
 
 # --- Load Actual PDF File ---
 pdf_filename = "Muhsinun Chowdhury Resume.pdf"
@@ -109,12 +109,28 @@ def test_upload():
         print("--- Test Finished ---")
 
 def test_upload_success(client: TestClient):
-    """Test successful file upload."""
-    test_filename = "test_document.pdf"
-    file_content = b"This is a test PDF content."
-    files = {'file': (test_filename, file_content, 'application/pdf')}
+    """Test successful file upload using a real PDF file."""
+    test_filename = "NIPS-2017-attention-is-all-you-need-Paper.pdf"
+    # Construct the path relative to this test file's location
+    script_dir = Path(__file__).resolve().parent
+    pdf_file_path = script_dir / "assets" / "example_pdfs" / test_filename
 
-    response = client.post("/api/v1/upload", files=files)
+    if not pdf_file_path.is_file():
+        pytest.fail(f"Test PDF file not found at expected path: {pdf_file_path}")
+
+    try:
+        # Read the file content first for assertion later
+        with open(pdf_file_path, "rb") as f_read:
+            file_content_original = f_read.read()
+
+        # Open the file again for uploading
+        with open(pdf_file_path, "rb") as f_upload:
+            files = {'file': (test_filename, f_upload, 'application/pdf')}
+
+            response = client.post("/api/v1/upload", files=files)
+
+    except Exception as e:
+        pytest.fail(f"An error occurred during file preparation or upload: {e}")
 
     assert response.status_code == 200
     data = response.json()
@@ -123,11 +139,11 @@ def test_upload_success(client: TestClient):
     assert data["content_type"] == 'application/pdf'
     assert data["file_id"].startswith("file_")
 
-    # Verify the file was actually saved in the test directory
+    # Verify the file was actually saved in the test directory and matches the original content
     file_id = data["file_id"]
     expected_path = TEST_UPLOAD_DIR / f"{file_id}.pdf"
     assert expected_path.exists()
-    assert expected_path.read_bytes() == file_content
+    assert expected_path.read_bytes() == file_content_original
 
 def test_upload_no_filename(client: TestClient):
     """Test uploading a file without providing a filename."""

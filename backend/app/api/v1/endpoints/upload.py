@@ -10,12 +10,13 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Define upload directory relative to the app's location (assuming app runs from /app)
-# Use environment variable if set, otherwise default to /app/uploads
-UPLOAD_DIR_STR = os.getenv("UPLOAD_DIR", "/app/uploads")
-UPLOAD_DIR = Path(UPLOAD_DIR_STR)
-
 router = APIRouter()
+
+def get_upload_dir() -> Path:
+    """Get the upload directory path, reading from environment variable at runtime."""
+    upload_dir_str = os.getenv("UPLOAD_DIR", "/app/uploads")
+    upload_dir = Path(upload_dir_str)
+    return upload_dir
 
 @router.post("") # Actual route is /api/v1/upload
 async def upload_document(file: UploadFile = File(...)):
@@ -30,14 +31,17 @@ async def upload_document(file: UploadFile = File(...)):
     print(f"Received file upload: {file.filename}, Content-Type: {file.content_type}")
     logger.info(f"Received file upload request for {file.filename}")
 
+    # Get upload directory at runtime
+    upload_dir = get_upload_dir()
+    
     # Ensure upload directory exists
-    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    upload_dir.mkdir(parents=True, exist_ok=True)
 
     # Generate a unique file ID and construct the path
     file_id = f"file_{uuid.uuid4()}"
     # Preserve the original extension if available
     file_extension = Path(file.filename).suffix
-    save_path = UPLOAD_DIR / f"{file_id}{file_extension}"
+    save_path = upload_dir / f"{file_id}{file_extension}"
 
     try:
         # Save the uploaded file
@@ -58,7 +62,6 @@ async def upload_document(file: UploadFile = File(...)):
         # file.file is the actual file-like object managed by UploadFile
         # UploadFile's context manager handles closing, no need for await file.close() here
         pass
-
 
     # Return the unique file ID
     return {
