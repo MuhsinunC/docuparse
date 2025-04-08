@@ -1,5 +1,11 @@
 # Dev environment
 .cursor/
+.windsurfrules
+/scripts/
+/README-task-master.md
+/.env.example
+/package.json
+/package-lock.json
 
 # Secrets
 .env_vars
@@ -143,3 +149,26 @@ backend/README.md
 frontend/README.md
 backend/.gitignore
 frontend/.gitignore
+
+# Added by Claude Task Master
+# Logs
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+# Task files
+tasks.json
+tasks/ 
