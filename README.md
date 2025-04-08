@@ -109,7 +109,7 @@ The application will allow users to upload documents through a web interface. Th
     *   Show processing status (e.g., "Uploading", "Parsing", "Ready", "Error").
 
 ### 3.2. PDF Parsing Engine
-*   **Technology:** Python backend using libraries like `PyMuPDF` (fitz) or `pdfplumber` for initial PDF handling. Integration with external APIs like Reducto is planned.
+*   **Technology:** Python backend using libraries like `PyMuPDF` (fitz) or `pdfplumber` for initial PDF handling.
 *   **Functionality (Initial Focus: PDFs):**
     *   **Text Extraction:** Extract text content preserving basic layout information where possible (e.g., paragraph breaks).
     *   **Table Extraction:** Detect and extract tables into a structured format (e.g., list of lists or list of dictionaries). Handle multi-page tables if feasible.
@@ -134,7 +134,7 @@ The application will allow users to upload documents through a web interface. Th
 
 *   **Backend Language:** Python 3.9+
 *   **Backend API Framework:** FastAPI
-*   **PDF Parsing:** Local libraries (`PyMuPDF`, `pdfplumber`) and/or external APIs (e.g., Reducto).
+*   **PDF Parsing:** Local libraries (`PyMuPDF`, `pdfplumber`)
 *   **Web Framework/UI:** Streamlit
 *   **Orchestration:** Docker, Docker Compose
 *   **Dependencies:** Conda `conda.yml` (separate for backend and frontend)
